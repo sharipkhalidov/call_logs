@@ -39,7 +39,7 @@ class CallInfo extends StatelessWidget {
                   style: const TextStyle(
                       fontSize: 30, color: AppColor.secondary)),
             ),
-          ],
+          ],//asddsa
         ),
         Row(
           crossAxisAlignment: CrossAxisAlignment.start,
