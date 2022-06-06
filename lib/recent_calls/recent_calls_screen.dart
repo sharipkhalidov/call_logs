@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:call_logs/recent_calls/call_item.dart';
 import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
+import 'dart:convert';
 
 class RecentCalls extends StatefulWidget {
   const RecentCalls({Key? key}) : super(key: key);
@@ -31,19 +32,37 @@ class _RecentCallsState extends State<RecentCalls> {
         ),
 
       ),
-      body: Column(
-        children: [
-       CallCard(date: '03.04.2022', additional: 'ww', person_and_calls: '89885553344'),
-       FutureBuilder<http.Response>(
+      body: FutureBuilder<http.Response>(
      future: http.get(Uri.parse('https://raw.githubusercontent.com/Gammadov/data/main/calls/call_logs.json')),
-         builder: (context, snapshot){
-       return Text(snapshot.data!.body);
-         }
-      )
+        builder: (context, snapshot){
+      final decoded = jsonDecode(snapshot.data!.body);
 
+      // List <Widget>  cards = [];
+      // for (int i = 0 ; i< decoded.length; i++){
+      //   final single_map = decoded[i];
+      //   cards.add(CallCard
+      //       (date: single_map['date'],                                   // 1 логический способ вывести список в правильном формате на экран
+      //       additional: single_map['additional'],
+      //       person_and_calls:single_map ['person']
+      //
+      //   ));
+      // }
+      // return ListView(children: cards);
 
+      return ListView.builder(
+          itemCount: decoded.length,
+          itemBuilder: (context, index) {
+        final singleMap = decoded[index];                              // 2 способ(с помощью специального виджета ListView.builder)
+        return CallCard
+                (date: singleMap['date'],
+                additional: singleMap['additional'],
+                person_and_calls:singleMap ['person'],
 
-      ],
+            );
+      }
+          );
+
+     }
       )
       );
   }
