@@ -34,38 +34,70 @@ class _RecentCallsState extends State<RecentCalls> {
       ),
       body: FutureBuilder<http.Response>(
      future: http.get(Uri.parse('https://raw.githubusercontent.com/Gammadov/data/main/calls/call_logs.json')),
-        builder: (context, snapshot){
-      final decoded = jsonDecode(snapshot.data!.body);
+        builder: (context, snapshot) {
+          // List <Widget>  cards = [];
+          // for (int i = 0 ; i< decoded.length; i++){
+          //   final single_map = decoded[i];
+          //   cards.add(CallCard
+          //       (date: single_map['date'],                                   // 1 логический способ вывести список в правильном формате на экран
+          //       additional: single_map['additional'],
+          //       person_and_calls:single_map ['person']
+          //
+          //   ));
+          // }
+          // return ListView(children: cards);
 
-      // List <Widget>  cards = [];
-      // for (int i = 0 ; i< decoded.length; i++){
-      //   final single_map = decoded[i];
-      //   cards.add(CallCard
-      //       (date: single_map['date'],                                   // 1 логический способ вывести список в правильном формате на экран
-      //       additional: single_map['additional'],
-      //       person_and_calls:single_map ['person']
-      //
-      //   ));
-      // }
-      // return ListView(children: cards);
 
-      return ListView.builder(
-          itemCount: decoded.length,
-          itemBuilder: (context, index) {
-        final singleMap = decoded[index];                              // 2 способ(с помощью специального виджета ListView.builder)
-        return CallCard
-                (date: singleMap['date'],
-                additional: singleMap['additional'],
-                person_and_calls:singleMap ['person'],
 
+//     if (snapshot.hasData) {
+//     final decoded = jsonDecode(snapshot.data!.body);
+//     return ListView.builder(
+//     itemCount: decoded.length,
+//     itemBuilder: (context, index) {
+//     final singleMap = decoded[index];                                            // 2 способ(с помощью специального виджета ListView.builder)
+//     return CallCard
+//     (date: singleMap['date'],
+//     additional: singleMap['additional'],
+//     person_and_calls:singleMap ['person'],
+//
+//     );
+//     }
+//     );
+//     } else {
+//     return Center(child: const CircularProgressIndicator());
+//      }
+//      }
+//       )
+//       );
+//
+// }
+//   }
+
+          if (snapshot.hasData) {
+            final decoded = jsonDecode(snapshot.data!.body);
+            return ListView.separated(
+                itemCount: decoded.length,
+                itemBuilder: (context, index) {
+                  final singleMap = decoded[index]; // 2 способ(с помощью специального виджета ListView.builder)                            // 3 способ с помощью ListView.separated
+                  return CallCard
+                    (date: singleMap['date'],
+                    additional: singleMap['additional'],
+                    person_and_calls: singleMap ['person'],
+
+                  );
+                },
+                separatorBuilder: (context, index) =>
+                const Padding(padding: EdgeInsets.only(left: 42),
+                  child: Divider(
+                      thickness: 0.5, height: 0.5, color: AppColor.tertiary),
+                )
             );
-      }
-          );
+          } else {
+            return Center(child: const CircularProgressIndicator());
+          }
+        }
+  )
+  );
 
-     }
-      )
-      );
-  }
 }
-
-
+}

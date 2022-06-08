@@ -114,7 +114,8 @@ class CallInfo extends StatelessWidget {
     } else {
               return const CircularProgressIndicator();
             }
-          },),
+          }
+          ),
         ),
       );
 
